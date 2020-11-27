@@ -13,8 +13,8 @@ import {
 import { makeStyles } from "@material-ui/core/styles";
 import { useDispatch, useSelector } from "react-redux";
 import Pagination from "@material-ui/lab/Pagination";
-import axios from "axios";
 import { Link } from "react-router-dom";
+import { getPatient } from "../../Redux/auth/action";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -44,10 +44,8 @@ export default function Home() {
   const [sort, setSort] = useState("");
   const [gender, setGender] = useState("");
   const [search, setSearch] = useState("");
-  const [finaldata, setFinaldata] = useState([]);
   const patients = useSelector((state) => state.auth.patient);
   console.log(patients);
-
   const dispatch = useDispatch();
   const handleChange = (event) => {
     setGender(event.target.value);
@@ -57,19 +55,11 @@ export default function Home() {
   };
   const handlePageChange = (event, value) => {
     setPage(value);
+    dispatch(getPatient({ page, sort, gender, search }));
   };
   useEffect(() => {
-    axios
-      .get(
-        `http://localhost:8000/api/patientsData?page=${page}&limit=6&age=${sort}&gender=${gender}&name=${search}`
-      )
-      .then((res) => {
-        setFinaldata(res.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, [page, sort, gender, dispatch, search]);
+    dispatch(getPatient({ page, sort, gender, search }));
+  }, [page, sort, gender, search, dispatch]);
 
   return (
     <div>
@@ -97,8 +87,8 @@ export default function Home() {
         required
       />
       <Grid container>
-        {finaldata.data &&
-          finaldata.data.map((item, index) => (
+        {patients.data &&
+          patients.data.map((item, index) => (
             <Grid item xs={3} className={classes.margin} key={index}>
               <Card className={classes.control}>
                 <CardContent>
@@ -128,7 +118,7 @@ export default function Home() {
 
       <div style={{ marginLeft: "40%" }}>
         <Pagination
-          count={finaldata.finalPage}
+          count={patients.finalPage}
           page={page}
           onChange={handlePageChange}
         />
