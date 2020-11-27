@@ -7,13 +7,13 @@ const {
 } = require("../Validation/validation");
 const registerUser = async (req, res) => {
   try {
-    const { error } = registerValidator(req.body);
+    const { error } = registerValidator(req.query);
 
     if (error) {
       throw new Error(error.details[0].message);
     }
 
-    const { email, password, name } = req.body;
+    const { email, password, name } = req.query;
     const userExists = await User.findOne({ email });
 
     const encryptedPassword = await bcrypt.hash(
@@ -45,13 +45,13 @@ const registerUser = async (req, res) => {
 const loginUser = async (req, res) => {
   console.log(req);
   try {
-    const { error } = loginValidator(req.body);
+    const { error } = loginValidator(req.query);
 
     if (error) {
       throw new Error(error.details[0].message);
     }
 
-    const { email, password } = req.body;
+    const { email, password } = req.query;
     const user = await User.findOne({ email });
 
     if (!user) {

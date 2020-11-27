@@ -4,7 +4,10 @@ const patientData = require("../MockData/database.json");
 const getPatientsDetails = async (req, res, next) => {
   let { gender, age, name } = req.query;
 
-  const page = Number(req.query.page);
+  let page = 1;
+  if (req.query.name == "") {
+    page = Number(req.query.page);
+  }
   const limit = Number(req.query.limit);
 
   let sortByAge = age == "asc" ? 1 : age == "desc" ? -1 : 0;
