@@ -31,7 +31,7 @@ export default function PollingStations(props) {
   const name = props.match.params.patient;
   const classes = useStyles();
   const [data, setData] = useState([]);
-  console.log(name);
+
   useEffect(() => {
     axios
       .get(`http://localhost:8000/api/patientsData?name=${name}`)
@@ -42,7 +42,7 @@ export default function PollingStations(props) {
         console.log(error);
       });
   }, [name]);
-  console.log(data);
+
   return (
     <Grid container className={classes.root} spacing={2} justify="center">
       <h1>Patient Details</h1>

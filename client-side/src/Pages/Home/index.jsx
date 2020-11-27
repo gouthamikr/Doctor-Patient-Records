@@ -13,7 +13,7 @@ import {
 import { makeStyles } from "@material-ui/core/styles";
 import { useDispatch, useSelector } from "react-redux";
 import Pagination from "@material-ui/lab/Pagination";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { getPatient } from "../../Redux/auth/action";
 
 const useStyles = makeStyles((theme) => ({
@@ -45,21 +45,29 @@ export default function Home() {
   const [gender, setGender] = useState("");
   const [search, setSearch] = useState("");
   const patients = useSelector((state) => state.auth.patient);
-  console.log(patients);
+
   const dispatch = useDispatch();
+  const history = useHistory();
+
   const handleChange = (event) => {
     setGender(event.target.value);
   };
+
   const handleSortChange = (event) => {
     setSort(event.target.value);
   };
+
   const handlePageChange = (event, value) => {
     setPage(value);
     dispatch(getPatient({ page, sort, gender, search }));
   };
+
   useEffect(() => {
     dispatch(getPatient({ page, sort, gender, search }));
-  }, [page, sort, gender, search, dispatch]);
+    history.push(
+      `/dashboard?page=${page}&age=${sort}&gender=${gender}&search=${search}`
+    );
+  }, [page, sort, gender, search, dispatch, history]);
 
   return (
     <div>
@@ -70,6 +78,7 @@ export default function Home() {
           <MenuItem value="Female">Female</MenuItem>
         </Select>
       </FormControl>
+
       <FormControl className={classes.formControl}>
         <InputLabel>Sort by age</InputLabel>
         <Select value={sort} onChange={handleSortChange}>
@@ -77,6 +86,7 @@ export default function Home() {
           <MenuItem value="desc">High to Low</MenuItem>
         </Select>
       </FormControl>
+
       <TextField
         label="search patient"
         type="search"
@@ -86,6 +96,7 @@ export default function Home() {
         variant="outlined"
         required
       />
+
       <Grid container>
         {patients.data &&
           patients.data.map((item, index) => (

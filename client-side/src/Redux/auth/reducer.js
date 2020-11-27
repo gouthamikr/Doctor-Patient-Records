@@ -24,7 +24,6 @@ const reducer = (state = initState, action) => {
         error: action.payload,
       };
     case GET_PATIENT_SUCCESS:
-      console.log(action.payload.data);
       return {
         ...state,
         error: "",

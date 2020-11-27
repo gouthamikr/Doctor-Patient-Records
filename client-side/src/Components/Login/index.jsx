@@ -3,6 +3,8 @@ import { Button, TextField, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core";
 import Axios from "axios";
 import { Link, Redirect } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { userlogin } from "../../Redux/auth1/action";
 
 const useStyles = makeStyles({
   root: {
@@ -15,7 +17,7 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
   const [auth, setAuth] = useState(false);
-
+  const dispatch = useDispatch();
   const handleLogin = () => {
     Axios.get(
       `http://localhost:8000/user/login?email=${email}&password=${password}`
@@ -27,6 +29,7 @@ export default function Login() {
       .catch((err) => {
         console.log(err);
       });
+    // dispatch(userlogin({ email, password }));
   };
   if (auth) {
     return <Redirect to="/dashboard" />;
