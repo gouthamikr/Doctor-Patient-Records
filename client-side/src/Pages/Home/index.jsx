@@ -38,12 +38,22 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 export default function Home() {
+  let [a, params] = window.location.href.split("?");
+  let paramsObject = {};
+  if (params !== undefined) {
+    params = params.split("&");
+
+    for (let i = 0; i < params.length; i++) {
+      const [key, value] = params[i].split("=");
+      paramsObject[key] = value;
+    }
+  }
   const classes = useStyles();
   const [page, setPage] = useState(1);
-  const [name, setname] = useState("");
-  const [sort, setSort] = useState("");
-  const [gender, setGender] = useState("");
-  const [search, setSearch] = useState("");
+  const [name, setname] = useState(paramsObject["name"] || "");
+  const [sort, setSort] = useState(paramsObject["age"] || "");
+  const [gender, setGender] = useState(paramsObject["gender"] || "");
+  const [search, setSearch] = useState(paramsObject["search"] || "");
   const patients = useSelector((state) => state.auth.patient);
 
   const dispatch = useDispatch();
