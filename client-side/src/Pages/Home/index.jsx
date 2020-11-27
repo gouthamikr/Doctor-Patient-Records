@@ -41,7 +41,7 @@ export default function Home() {
   let params = new URLSearchParams(useLocation().search);
 
   const classes = useStyles();
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(params.get("page") || 1);
   const [name, setname] = useState(params.get("name") || "");
   const [sort, setSort] = useState(params.get("age") || "");
   const [gender, setGender] = useState(params.get("gender") || "");
