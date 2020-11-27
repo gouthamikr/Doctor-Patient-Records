@@ -13,7 +13,7 @@ import {
 import { makeStyles } from "@material-ui/core/styles";
 import { useDispatch, useSelector } from "react-redux";
 import Pagination from "@material-ui/lab/Pagination";
-import { Link, useHistory } from "react-router-dom";
+import { Link, useHistory, useLocation } from "react-router-dom";
 import { getPatient } from "../../Redux/auth/action";
 
 const useStyles = makeStyles((theme) => ({
@@ -38,22 +38,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 export default function Home() {
-  let [a, params] = window.location.href.split("?");
-  let paramsObject = {};
-  if (params !== undefined) {
-    params = params.split("&");
+  let params = new URLSearchParams(useLocation().search);
 
-    for (let i = 0; i < params.length; i++) {
-      const [key, value] = params[i].split("=");
-      paramsObject[key] = value;
-    }
-  }
   const classes = useStyles();
   const [page, setPage] = useState(1);
-  const [name, setname] = useState(paramsObject["name"] || "");
-  const [sort, setSort] = useState(paramsObject["age"] || "");
-  const [gender, setGender] = useState(paramsObject["gender"] || "");
-  const [search, setSearch] = useState(paramsObject["search"] || "");
+  const [name, setname] = useState(params.get("name") || "");
+  const [sort, setSort] = useState(params.get("age") || "");
+  const [gender, setGender] = useState(params.get("gender") || "");
+  const [search, setSearch] = useState(params.get("search") || "");
   const patients = useSelector((state) => state.auth.patient);
 
   const dispatch = useDispatch();
